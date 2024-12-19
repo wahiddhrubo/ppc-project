@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { MdManageAccounts } from "react-icons/md";
 
@@ -16,10 +16,10 @@ type Option = {
   property: string;
 };
 
-function capitalize(str: string): string {
-  if (!str) return str;
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-}
+// function capitalize(str: string): string {
+//   if (!str) return str;
+//   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+// }
 
 export default function FieldWithDropdown({
   label,
@@ -28,7 +28,6 @@ export default function FieldWithDropdown({
   options,
 }: DropDownFieldProps) {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [blur, setBlur] = useState(false);
 
   const inputHandler = (value: string) => {
     setInput(value);
@@ -45,11 +44,6 @@ export default function FieldWithDropdown({
       setShowDropdown(false);
     }, 300);
   };
-  useEffect(() => {
-    if (blur) {
-      setShowDropdown(false);
-    }
-  }, [blur]);
 
   const optionHandler = (value: string) => {
     setInput(value);
@@ -71,7 +65,7 @@ export default function FieldWithDropdown({
         }}
         className="absolute z-10 bg-white text-black p-2 transition-opacity duration-300 origin-top   border-2 top-full mt-2 shadow-lg rounded-[4px] left-0 border-blue-500 w-80 "
       >
-        <div className="border-b-2 pb-2 items-center p-2 mb-2 flex relative text-[12px] font-semibold text-gray-600 border-b-black flex">
+        <div className="border-b-2 pb-2 items-center p-2 mb-2 relative text-[12px] font-semibold text-gray-600 border-b-black flex">
           Type "/" to search from your saved info
           <div
             onClick={() => setShowDropdown(false)}
@@ -80,15 +74,15 @@ export default function FieldWithDropdown({
             <IoCloseOutline className="text-[20px] text-black" />
           </div>
         </div>
-        {options.map((option, index) => (
+        {options.map((option) => (
           <div
             onClick={() => optionHandler(option.name)}
             key={option.name}
             className="flex px-5 text-left hover:bg-blue-200 hover:border-black border-opacity-60 rounded-sm border-transparent cursor-pointer border-2 py-2 text-sm font-semibold my-3"
           >
-            <div className="">{capitalize(option.name)}</div>
-            <div className=" text-center mx-auto">{capitalize(label)}</div>
-            <div className="">{capitalize(option.property)}</div>
+            <div className="">{option.name}</div>
+            <div className=" text-center mx-auto">{label}</div>
+            <div className="">{option.property}</div>
           </div>
         ))}
         <div className="gap-3 items-center p-2 mt-2 relative text-[12px] font-bold text-black border-black flex">

@@ -20,31 +20,6 @@ export default function Form() {
   const [xL3Size, setXL3Size] = useState("");
   const [part, setPart] = useState("");
 
-  const checkSizeOrder = (sizes: any): boolean => {
-    const sizeLabels = [
-      "S Size",
-      "M Size",
-      "L Size",
-      "XL Size",
-      "2XL Size",
-      "3XL Size",
-    ];
-    const sizeOrder = sizeLabels.map((label) => sizes[label]);
-    for (let i = 0; i < sizeOrder.length - 1; i++) {
-      console.log(sizeOrder[i]);
-      if (parseFloat(sizeOrder[i]) > parseFloat(sizeOrder[i + 1])) {
-        alert(
-          `Problem detected: "${sizeLabels[i]}" (${sizeOrder[i]}) > "${
-            sizeLabels[i + 1]
-          }" (${sizeOrder[i + 1]})`
-        );
-        return false;
-      }
-    }
-
-    return true;
-  };
-
   const fields = {
     company: company,
     buyer: buyer,
@@ -94,9 +69,8 @@ export default function Form() {
   };
   const submitHandler = () => {
     const emptyfields = hasEmptyFields(fields);
-    const sizeInOrder = checkSizeOrder(fields);
 
-    if (!emptyfields && sizeInOrder) {
+    if (!emptyfields) {
     }
   };
 

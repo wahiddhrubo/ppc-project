@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FieldWithDropdown, {
   DropDownFieldProps,
 } from "../components/form/fieldWithDropdown";
@@ -6,26 +6,26 @@ import FieldWithoutDropdown, {
   FieldProps,
 } from "../components/form/fieldWithoutDropdown";
 import { useNavigate } from "react-router-dom";
-
-export type BundleFormDataProps = {
-  company: string;
-  buyer: string;
-  color: string;
-  "PO No": string;
-  style: string;
-  shade: string;
-  "Cutting Number": string;
-  part: string;
-  "S Size": string;
-  "M Size": string;
-  "L Size": string;
-  "XL Size": string;
-  "2XL Size": string;
-  "3XL Size": string;
-};
+import { QRCodeCanvas } from "qrcode.react";
+import {
+  BundleFormDataProps,
+  pdfCodeData,
+  QrData,
+} from "../types/bundlerTypes";
+import { generateQrData, hasEmptyFields } from "../utils/formUtils";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import PdfComponent from "../components/pdfRendered/pdf";
 
 export default function Form() {
   const navigate = useNavigate();
+  const [navigatePage, setNavigatePage] = useState(false);
+  const qrCodeCanvas = useRef<HTMLCanvasElement>(null);
+
+  const [pdfCodesDatas, setPdfCodesDatas] = useState<Array<pdfCodeData>>([]);
+  const [qrCodes, setQrCodes] = useState<string[]>([]);
+
+  const [qrCodeDatas, setQrCodeDatas] = useState<Array<QrData>>([]);
+
   const [company, setCompany] = useState("");
   const [buyer, setBuyer] = useState("");
   const [color, setColor] = useState("");
@@ -40,8 +40,9 @@ export default function Form() {
   const [xL2Size, setXL2Size] = useState("");
   const [xL3Size, setXL3Size] = useState("");
   const [part, setPart] = useState("");
+  const linkGenerated = pdfCodesDatas.filter((pdf) => pdf?.dataUrl).length > 0;
 
-  const info_fields = {
+  const infoFields = {
     company: company,
     buyer: buyer,
     color: color,
@@ -51,6 +52,7 @@ export default function Form() {
     "Cutting Number": cuttingNumber,
     part: part,
   };
+
   const sizesFields = {
     "S Size": sSize,
     "M Size": mSize,
@@ -58,52 +60,6 @@ export default function Form() {
     "XL Size": xLSize,
     "2XL Size": xL2Size,
     "3XL Size": xL3Size,
-  };
-
-  const hasEmptyFields = (): boolean => {
-    const emptyFields = Object.entries(info_fields)
-      .filter(([_, value]) => !value) // Filter fields with empty values
-      .map(([key]) => key); // Get only the keys (field names)
-
-    const sizeGiven = Object.values(sizesFields).join("");
-    if (emptyFields.length > 0) {
-      alert(`The following fields are not filled: ${emptyFields.join(", ")}`);
-      return true;
-    } else if (sizeGiven === "") {
-      alert(`No Size Given`);
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  const clearFields = () => {
-    setCompany("");
-    setBuyer("");
-    setColor("");
-    setPoNo("");
-    setStyle("");
-    setShade("");
-    setCuttingNumber("");
-    setSSize("");
-    setMSize("");
-    setLSize("");
-    setXLSize("");
-    setXL2Size("");
-    setXL3Size("");
-    setPart("");
-    alert("Fields Cleared");
-  };
-  const submitHandler = () => {
-    const emptyfields = hasEmptyFields();
-    const data: BundleFormDataProps = Object.assign(
-      {},
-      info_fields,
-      sizesFields
-    );
-    if (!emptyfields) {
-      navigate("/pdf-renderer", { state: data });
-    }
   };
 
   const otherField: Array<FieldProps> = [
@@ -227,8 +183,84 @@ export default function Form() {
     },
   ];
 
+  const clearFields = () => {
+    setCompany("");
+    setBuyer("");
+    setColor("");
+    setPoNo("");
+    setStyle("");
+    setShade("");
+    setCuttingNumber("");
+    setSSize("");
+    setMSize("");
+    setLSize("");
+    setXLSize("");
+    setXL2Size("");
+    setXL3Size("");
+    setPart("");
+    alert("Fields Cleared");
+  };
+
+  // GENERATE DATA FOR THE QR CODES FROM THE FORM
+  const submitHandler = () => {
+    const emptyfields = hasEmptyFields({ infoFields, sizesFields });
+    const data: BundleFormDataProps = Object.assign(
+      {},
+      infoFields,
+      sizesFields
+    );
+
+    if (!emptyfields) {
+      const [newQrDatas, newPdfCodesDatas] = generateQrData({ data });
+
+      setQrCodeDatas(newQrDatas);
+      setPdfCodesDatas(newPdfCodesDatas);
+    }
+  };
+
+  // GENERATE URL OF THE QR CODES
+  useEffect(() => {
+    if (qrCodeDatas.length > 0) {
+      const canvasRefs =
+        document.querySelectorAll<HTMLCanvasElement>(".qr-code-canvas");
+      const interval = setInterval(() => {
+        const allImagesGenerated = Array.from(canvasRefs).every(
+          (canvas) => canvas.toDataURL().length > 0
+        );
+        if (allImagesGenerated) {
+          const generatedCodes = Array.from(canvasRefs).map((canvas) =>
+            canvas.toDataURL("image/jpg", 1)
+          );
+          setQrCodes(generatedCodes);
+          clearInterval(interval);
+        }
+      }, 100);
+    }
+  }, [qrCodeDatas]);
+
+  // ASSIGN THE  QR CODES URL TO THE PDFDATA
+  useEffect(() => {
+    if (qrCodes.length > 0) {
+      setPdfCodesDatas((prevPdfCodesDatas) =>
+        prevPdfCodesDatas.map((obj, index) => ({
+          ...obj,
+          dataUrl: qrCodes[index] || "",
+        }))
+      );
+    }
+  }, [qrCodes]);
+
+  useEffect(() => {
+    const test = pdfCodesDatas.filter((pdf) => pdf?.dataUrl);
+
+    if (navigatePage && qrCodes.length > 0 && test.length > 0) {
+      navigate("/pdf-renderer", { state: pdfCodesDatas });
+      console.log(pdfCodesDatas);
+    }
+  }, [navigatePage, qrCodes, pdfCodesDatas]);
+
   return (
-    <>
+    <div className="py-10">
       <div className="flex text-black border-2 justify-center border-blue-600 py-12  gap-y-4 flex-wrap lg:w-1/2 w-2/3 mx-auto px-12 ">
         <h1 className="text-4xl leading-loose text-bold">
           Bundle Card Generator
@@ -284,8 +316,41 @@ export default function Form() {
           value="Clear"
           className="btn"
         />
-        <input type="submit" value="Print this out!" className="btn" />
+        {linkGenerated ? (
+          <PDFDownloadLink
+            document={<PdfComponent pdfDatas={pdfCodesDatas} />}
+            fileName="Bundle.pdf"
+          >
+            <input type="submit" value="Download Pdf" className="btn" />
+          </PDFDownloadLink>
+        ) : (
+          <button
+            className="btn btn-disabled !text-black"
+            tabIndex={-1}
+            role="button"
+            aria-disabled="true"
+          >
+            Download Pdf
+          </button>
+        )}
+        <input
+          onClick={() => setNavigatePage(true)}
+          type="submit"
+          value="Print this out!"
+          className="btn"
+        />
       </div>
-    </>
+      <div className="hidden">
+        {qrCodeDatas.map((qrData, index) => (
+          <QRCodeCanvas
+            key={index}
+            size={350}
+            className="qr-code-canvas" //   id="qrcode-canvas"
+            ref={qrCodeCanvas}
+            value={qrData.qrString}
+          />
+        ))}
+      </div>
+    </div>
   );
 }

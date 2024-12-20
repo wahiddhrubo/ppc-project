@@ -340,12 +340,32 @@ export default function Form() {
           className="btn"
         />
       </div>
+      <div className="flex justify-center flex-wrap w-fit mx-auto gap-4">
+        {qrCodeDatas.map((qrData, index) => (
+          <div className="border-blue-500 border-2 px-2 pt-10 pb-2 ">
+            <div className="mb-3 text-left text-black text-sm">
+              <p>Cut no: {qrData.cutNo}</p>
+              <p>Size: {qrData.size}</p>
+              <p>Bundle no: {qrData.bunNo}</p>
+              <p>
+                {qrData.start} - {qrData.end}
+              </p>
+            </div>
+            <QRCodeCanvas
+              key={index}
+              size={95}
+              ref={qrCodeCanvas}
+              value={qrData.qrString}
+            />
+          </div>
+        ))}
+      </div>
       <div className="hidden">
         {qrCodeDatas.map((qrData, index) => (
           <QRCodeCanvas
             key={index}
-            size={350}
-            className="qr-code-canvas" //   id="qrcode-canvas"
+            size={125}
+            className="qr-code-canvas w-[125px] h-[125px]" //   id="qrcode-canvas"
             ref={qrCodeCanvas}
             value={qrData.qrString}
           />

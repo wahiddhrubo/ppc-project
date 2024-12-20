@@ -6,7 +6,7 @@ import {
   Text,
   Image,
 } from "@react-pdf/renderer";
-import { pdfCodeData } from "../../pages/form";
+import { pdfCodeData } from "../../types/bundlerTypes";
 
 const styles = StyleSheet.create({
   page: {

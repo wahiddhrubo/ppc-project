@@ -1,10 +1,31 @@
 import { useState } from "react";
 import FieldWithDropdown, {
   DropDownFieldProps,
-} from "./form/fieldWithDropdown";
-import FieldWithoutDropdown, { FieldProps } from "./form/fieldWithoutDropdown";
+} from "../components/form/fieldWithDropdown";
+import FieldWithoutDropdown, {
+  FieldProps,
+} from "../components/form/fieldWithoutDropdown";
+import { useNavigate } from "react-router-dom";
+
+export type BundleFormDataProps = {
+  company: string;
+  buyer: string;
+  color: string;
+  "PO No": string;
+  style: string;
+  shade: string;
+  "Cutting Number": string;
+  part: string;
+  "S Size": string;
+  "M Size": string;
+  "L Size": string;
+  "XL Size": string;
+  "2XL Size": string;
+  "3XL Size": string;
+};
 
 export default function Form() {
+  const navigate = useNavigate();
   const [company, setCompany] = useState("");
   const [buyer, setBuyer] = useState("");
   const [color, setColor] = useState("");
@@ -20,7 +41,7 @@ export default function Form() {
   const [xL3Size, setXL3Size] = useState("");
   const [part, setPart] = useState("");
 
-  const fields = {
+  const info_fields = {
     company: company,
     buyer: buyer,
     color: color,
@@ -28,22 +49,28 @@ export default function Form() {
     style: style,
     shade: shade,
     "Cutting Number": cuttingNumber,
+    part: part,
+  };
+  const sizesFields = {
     "S Size": sSize,
     "M Size": mSize,
     "L Size": lSize,
     "XL Size": xLSize,
     "2XL Size": xL2Size,
     "3XL Size": xL3Size,
-    part: part,
   };
 
-  const hasEmptyFields = (fields: Record<string, any>): boolean => {
-    const emptyFields = Object.entries(fields)
+  const hasEmptyFields = (): boolean => {
+    const emptyFields = Object.entries(info_fields)
       .filter(([_, value]) => !value) // Filter fields with empty values
       .map(([key]) => key); // Get only the keys (field names)
 
+    const sizeGiven = Object.values(sizesFields).join("");
     if (emptyFields.length > 0) {
       alert(`The following fields are not filled: ${emptyFields.join(", ")}`);
+      return true;
+    } else if (sizeGiven === "") {
+      alert(`No Size Given`);
       return true;
     } else {
       return false;
@@ -68,9 +95,14 @@ export default function Form() {
     alert("Fields Cleared");
   };
   const submitHandler = () => {
-    const emptyfields = hasEmptyFields(fields);
-
+    const emptyfields = hasEmptyFields();
+    const data: BundleFormDataProps = Object.assign(
+      {},
+      info_fields,
+      sizesFields
+    );
     if (!emptyfields) {
+      navigate("/pdf-renderer", { state: data });
     }
   };
 
@@ -194,6 +226,7 @@ export default function Form() {
       setInput: setColor,
     },
   ];
+
   return (
     <>
       <div className="flex text-black border-2 justify-center border-blue-600 py-12  gap-y-4 flex-wrap lg:w-1/2 w-2/3 mx-auto px-12 ">

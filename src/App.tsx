@@ -1,12 +1,20 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
-import Form from "./components/form";
+import Form from "./pages/form";
+import PdfRenderer from "./pages/pdfRenderer";
 
 function App() {
-  return (
-    <div className=" w-full bg-white">
-      <Form />
-    </div>
-  );
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Form />,
+    },
+    {
+      path: "/pdf-renderer",
+      element: <PdfRenderer />,
+    },
+  ]);
+  return <RouterProvider router={router} />;
 }
 
 export default App;

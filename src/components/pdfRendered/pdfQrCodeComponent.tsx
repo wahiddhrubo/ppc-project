@@ -119,14 +119,13 @@ export default function PdfQrCodeComponent({
       borderColor: "grey",
     },
     title: {
-      fontSize: ".06in",
+      fontSize: 5.5,
       borderBottom: 1,
       borderTop: 0,
       borderColor: "grey",
       padding: 3,
       margin: 0,
       color: "black",
-      textAlign: "center",
       width: "100%",
     },
     lastBox: {
@@ -244,12 +243,13 @@ export default function PdfQrCodeComponent({
         }}
       >
         <View style={styles.title}>
-          <Text style={{ fontFamily: "Helvetica-Bold" }}>
-            {formattedTime}, by Panacea Private Consulting
-          </Text>
+          <Text style={{}}>{formattedTime}, by Panacea Private Consulting</Text>
         </View>
         <View style={styles.title}>
-          <Text style={{ fontFamily: "Helvetica-Bold" }}> Replace </Text>
+          <Text style={{ fontFamily: "Helvetica-Bold", textAlign: "center" }}>
+            {" "}
+            Replace{" "}
+          </Text>
         </View>
       </View>
 

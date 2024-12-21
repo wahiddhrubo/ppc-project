@@ -15,6 +15,7 @@ import {
 import { generateQrData, hasEmptyFields } from "../utils/formUtils";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PdfComponent from "../components/pdfRendered/pdf";
+import PreviewQrCodeComponent from "../components/pdfRendered/previewQrCodeComponent";
 
 export default function Form() {
   const navigate = useNavigate();
@@ -341,23 +342,8 @@ export default function Form() {
         />
       </div>
       <div className="flex justify-center flex-wrap w-fit mx-auto gap-4">
-        {qrCodeDatas.map((qrData, index) => (
-          <div className="border-blue-500 border-2 px-2 pt-10 pb-2 ">
-            <div className="mb-3 text-left text-black text-sm">
-              <p>Cut no: {qrData.cutNo}</p>
-              <p>Size: {qrData.size}</p>
-              <p>Bundle no: {qrData.bunNo}</p>
-              <p>
-                {qrData.start} - {qrData.end}
-              </p>
-            </div>
-            <QRCodeCanvas
-              key={index}
-              size={95}
-              ref={qrCodeCanvas}
-              value={qrData.qrString}
-            />
-          </div>
+        {pdfCodesDatas.map((qrData, index) => (
+          <PreviewQrCodeComponent pdfData={qrData} />
         ))}
       </div>
       <div className="hidden">

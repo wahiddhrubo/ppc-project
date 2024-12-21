@@ -2,6 +2,7 @@ import React from "react";
 import { pdfCodeData } from "../types/bundlerTypes";
 import { Document, Page, PDFViewer } from "@react-pdf/renderer";
 import PdfQrCodeComponent from "../components/pdfRendered/pdfQrCodeComponent";
+import PreviewQrCodeComponent from "../components/pdfRendered/previewQrCodeComponent";
 
 export default function Test() {
   const testPdfData: pdfCodeData = {
@@ -22,13 +23,7 @@ export default function Test() {
   };
   return (
     <div className="w-full h-full">
-      <PDFViewer className="w-full h-screen">
-        <Document>
-          <Page>
-            <PdfQrCodeComponent pdfData={testPdfData} />
-          </Page>
-        </Document>
-      </PDFViewer>
+      <PreviewQrCodeComponent pdfData={testPdfData} />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import Form from "./pages/form";
 import PdfRenderer from "./pages/pdfRenderer";
+import Test from "./pages/test";
 
 function App() {
   const router = createBrowserRouter([
@@ -12,6 +13,10 @@ function App() {
     {
       path: "/pdf-renderer",
       element: <PdfRenderer />,
+    },
+    {
+      path: "/test",
+      element: <Test />,
     },
   ]);
   return <RouterProvider router={router} />;

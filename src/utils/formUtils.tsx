@@ -59,9 +59,11 @@ export const generateQrData = ({
           color: data["color"],
           shade: data["shade"],
           cutNo: data["Cutting Number"],
+          part: data["part"],
           size: size.replace(" Size", ""),
           bunNo: i + 1,
           start: 10 * i + 1,
+          company: data["company"],
           end: qrCodesLen - 1 === i ? parseFloat(data[size]) : 10 * (i + 1),
         };
         newPdfCodesDatas.push(newPdfCodeData);

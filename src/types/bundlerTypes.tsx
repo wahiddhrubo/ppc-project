@@ -10,6 +10,8 @@ export type pdfCodeData = {
   bunNo: number;
   start: number;
   end: number;
+  part: string;
+  company: string;
 };
 
 export type QrData = {
@@ -24,6 +26,8 @@ export type QrData = {
   bunNo: number;
   start: number;
   end: number;
+  part: string;
+  company: string;
 };
 export type sizes =
   | "S Size"

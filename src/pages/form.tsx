@@ -342,7 +342,7 @@ export default function Form() {
         />
       </div>
       <div className="flex justify-center flex-wrap w-fit mx-auto gap-4">
-        {pdfCodesDatas.map((qrData, index) => (
+        {pdfCodesDatas.map((qrData, ) => (
           <PreviewQrCodeComponent pdfData={qrData} />
         ))}
       </div>

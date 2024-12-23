@@ -1,7 +1,4 @@
-import React from "react";
 import { pdfCodeData } from "../types/bundlerTypes";
-import { Document, Page, PDFViewer } from "@react-pdf/renderer";
-import PdfQrCodeComponent from "../components/pdfRendered/pdfQrCodeComponent";
 import PreviewQrCodeComponent from "../components/pdfRendered/previewQrCodeComponent";
 
 export default function Test() {

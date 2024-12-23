@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from "@react-pdf/renderer";
+import { StyleSheet } from "@react-pdf/renderer";
 import { pdfCodeData } from "../../types/bundlerTypes";
 
 export default function PreviewQrCodeComponent({
@@ -201,7 +201,16 @@ export default function PreviewQrCodeComponent({
           </div>
         </div>
         <div style={styles.heroImageBox}>
-          {dataUrl && <img style={styles.qrImage} src={dataUrl || ""} />}
+          {dataUrl && (
+            <img
+              style={{
+                width: 0.65 * 100,
+                height: 0.65 * 100,
+                objectFit: "cover",
+              }}
+              src={dataUrl || ""}
+            />
+          )}
         </div>
       </div>
 

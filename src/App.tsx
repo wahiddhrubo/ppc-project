@@ -3,6 +3,7 @@ import "./App.css";
 import Form from "./pages/form";
 import PdfRenderer from "./pages/pdfRenderer";
 import Test from "./pages/test";
+import MachineTable from "./pages/machineTable";
 
 function App() {
   const router = createBrowserRouter([
@@ -17,6 +18,10 @@ function App() {
     {
       path: "/test",
       element: <Test />,
+    },
+    {
+      path: "/machines",
+      element: <MachineTable />,
     },
   ]);
   return <RouterProvider router={router} />;

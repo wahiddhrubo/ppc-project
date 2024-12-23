@@ -4,12 +4,18 @@ import Form from "./pages/form";
 import PdfRenderer from "./pages/pdfRenderer";
 import Test from "./pages/test";
 import MachineTable from "./pages/machineTable";
+import NavBar from "./components/navBar";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Form />,
+      element: (
+        <>
+          <NavBar />
+          <Form />,
+        </>
+      ),
     },
     {
       path: "/pdf-renderer",
@@ -21,7 +27,12 @@ function App() {
     },
     {
       path: "/machines",
-      element: <MachineTable />,
+      element: (
+        <>
+          <NavBar />
+          <MachineTable />,
+        </>
+      ),
     },
   ]);
   return <RouterProvider router={router} />;

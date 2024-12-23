@@ -199,6 +199,9 @@ export default function Form() {
     setXL2Size("");
     setXL3Size("");
     setPart("");
+    setPdfCodesDatas([]);
+    setQrCodes([]);
+    setQrCodeDatas([]);
     alert("Fields Cleared");
   };
 
@@ -256,7 +259,6 @@ export default function Form() {
 
     if (navigatePage && qrCodes.length > 0 && test.length > 0) {
       navigate("/pdf-renderer", { state: pdfCodesDatas });
-      console.log(pdfCodesDatas);
     }
   }, [navigatePage, qrCodes, pdfCodesDatas]);
 
@@ -342,7 +344,7 @@ export default function Form() {
         />
       </div>
       <div className="flex justify-center flex-wrap w-fit mx-auto gap-4">
-        {pdfCodesDatas.map((qrData, ) => (
+        {pdfCodesDatas.map((qrData) => (
           <PreviewQrCodeComponent pdfData={qrData} />
         ))}
       </div>

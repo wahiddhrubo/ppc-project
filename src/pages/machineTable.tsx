@@ -31,8 +31,10 @@ import {
 } from "../components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { Button } from "../components/ui/button";
+import ClockLoader from "react-spinners/ClockLoader";
 
 export default function MachineTable() {
+  const [loading, setLoading] = useState(false);
   const columnHelper = createColumnHelper<MaintanaceMachine>();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -153,97 +155,113 @@ export default function MachineTable() {
     },
   });
   useEffect(() => {
-    axios
-      .get(MAINTANANCE_MACHINE_URL)
-      .then((response) => {
-        setMachines(response.data);
-      })
-      .catch((e) => console.log(e));
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const { data: response } = await axios.get(MAINTANANCE_MACHINE_URL);
+        setMachines(response);
+      } catch (error) {
+        //   console.error(error.message);
+      }
+      setLoading(false);
+    };
+    fetchData();
   }, []);
   return (
-    <div className="py-20">
-      <div className="px-10 ">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <div className="ml-auto cursor-pointer border-2 rounded-md border-black w-fit flex bg-white p-2">
-              Hide Columns <ChevronDown />
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize cursor-pointer my-2"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-      <div className="px-10 py-10">
-        <Table className="text-black border-2 text-left  ">
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="px-3 py-2">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id} className="border-b">
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="px-3 py-2 ">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredRowModel().rows.length} entries.
+    <>
+      {!loading ? (
+        <div className="py-20">
+          <div className="px-10 ">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <div className="ml-auto cursor-pointer border-2 rounded-md border-black w-fit flex bg-white p-2">
+                  Hide Columns <ChevronDown />
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize cursor-pointer my-2"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    );
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-            </Button>
+          <div className="px-10 py-10">
+            <Table className="text-black border-2 text-left  ">
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id} className="px-3 py-2">
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} className="border-b">
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id} className="px-3 py-2 ">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <div className="flex items-center justify-end space-x-2 py-4">
+              <div className="flex-1 text-sm text-muted-foreground">
+                {table.getFilteredRowModel().rows.length} entries.
+              </div>
+              <div className="space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  Previous
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <div className="w-screen items-center fixed inset-0 bg-white z-10  top-0 h-screen flex justify-center content-center">
+          <ClockLoader size={80} />
+        </div>
+      )}
+    </>
   );
 }

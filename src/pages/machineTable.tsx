@@ -8,7 +8,6 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   SortingState,
   useReactTable,
@@ -22,11 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import {
-  MdModeEdit,
-  MdOutlineZoomOut,
-  MdOutlineZoomOutMap,
-} from "react-icons/md";
+import { MdModeEdit, MdOutlineZoomOutMap } from "react-icons/md";
 import { IoTrashSharp } from "react-icons/io5";
 import {
   DropdownMenu,
@@ -45,7 +40,7 @@ export default function MachineTable() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const columns = [
     columnHelper.accessor("machine_id", {
-      cell: (info) => (
+      cell: () => (
         <span className="flex gap-1 text-[18px]">
           <MdModeEdit />
           <IoTrashSharp />

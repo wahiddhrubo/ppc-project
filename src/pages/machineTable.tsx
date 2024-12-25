@@ -57,14 +57,8 @@ export default function MachineTable() {
           <MdOutlineZoomOutMap />
         </span>
       ),
-      header: () => (
-        <TableHeaderWithFilter
-          dataType="string"
-          id="action"
-          setAllignment={setAlignments}
-          title="Actions"
-        />
-      ),
+      header: () => <span className="text-black ">Actions</span>,
+
       id: "action",
       enableHiding: false,
       enableSorting: false,
@@ -219,14 +213,7 @@ export default function MachineTable() {
       cell: (info) => info.getValue(),
       enableHiding: true,
       enableSorting: true,
-      header: () => (
-        <TableHeaderWithFilter
-          title="Qr Code"
-          id="Qr Code"
-          dataType="number"
-          setAllignment={setAlignments}
-        />
-      ),
+      header: () => <span className="text-black ">Qr Code</span>,
       id: "qr code",
     }),
   ];

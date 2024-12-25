@@ -15,6 +15,7 @@ import { Minus, Plus } from "lucide-react";
 import {
   FilterConditionNumbers,
   FilterConditionStrings,
+  FilterValueNumbers,
 } from "../../utils/machineTableUtils";
 
 export default function FilterByCondition({
@@ -59,6 +60,7 @@ export default function FilterByCondition({
       },
     ]);
   };
+  //   console.log(fil && !FilterValueNumbers.includes(filterConditions[0].condition));
   return (
     <div className="relative text-sm text-left flex-col flex">
       <div
@@ -106,8 +108,11 @@ export default function FilterByCondition({
             onChange={(e) => {
               updateFilterValue("0", e.target.value);
             }}
-            disabled={filterConditions.length == 0}
-            className="w-full border-2 border-black bg-transparent p-2 rounded-sm focus-within:outline-none"
+            disabled={
+              filterConditions.length == 0 ||
+              !FilterValueNumbers.includes(filterConditions[0]?.condition)
+            }
+            className="w-full border-2 disabled:border-gray-400 border-black bg-transparent p-2 rounded-sm focus-within:outline-none"
           />
         </div>
       )}
@@ -192,8 +197,11 @@ export default function FilterByCondition({
               onChange={(e) => {
                 updateFilterValue("1", e.target.value);
               }}
-              disabled={filterConditions.length == 0}
-              className="w-full border-2 border-black bg-transparent p-2 rounded-sm focus-within:outline-none"
+              disabled={
+                filterConditions.length < 2 ||
+                !FilterValueNumbers.includes(filterConditions[1]?.condition)
+              }
+              className="w-full border-2 disabled:border-gray-400 border-black bg-transparent p-2 rounded-sm focus-within:outline-none"
             />
           </div>
         </div>

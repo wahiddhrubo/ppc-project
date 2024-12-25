@@ -25,6 +25,16 @@ export const FilterConditionNumbers: FilterConditionNumberType[] = [
   "Is not between",
   "None",
 ];
+export const FilterValueNumbers: FilterConditionNumberType[] = [
+  "Is equal to",
+  "Is not equal to",
+  "Greater than",
+  "Greater than or equal to",
+  "Less than",
+  "Less than or equal to",
+  "Is between",
+  "Is not between",
+];
 
 export const updateAlignment = (
   newAllignment: "left" | "right" | "center",

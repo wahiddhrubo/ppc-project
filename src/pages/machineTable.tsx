@@ -286,7 +286,7 @@ export default function MachineTable() {
   return (
     <>
       {!loading ? (
-        <div className="py-20">
+        <div className="">
           <div className="px-10 ">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

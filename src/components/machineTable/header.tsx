@@ -17,6 +17,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { useSearchParams } from "react-router-dom";
 import FilterByValue from "./filterByValue";
 import FilterByCondition from "./filterByCondition";
+import { DropdownMenuItem } from "../ui/dropdown-menu";
 
 export default function TableHeaderWithFilter({
   title,
@@ -94,12 +95,12 @@ export default function TableHeaderWithFilter({
   return (
     <div className="text-black flex gap-2 items-center  relative">
       <span className="text-black text-left">{title}</span>
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <FilterIcon className="cursor-pointer" size={16} />
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="bg-white text-lg w-56 border-2 p-5 rounded-sm border-black"
+          className="bg-white z-100 text-lg w-56 border-2 p-5 rounded-sm border-black"
           align="start"
         >
           <ScrollArea className="w-full  h-fit">
@@ -134,14 +135,14 @@ export default function TableHeaderWithFilter({
               setFilterUniques={setFilterUniques}
               setFilterValue={setFilterValue}
             />
-            <div className="w-full text-right">
+            <DropdownMenuItem className="w-full text-right">
               <button
                 onClick={filterHandler}
                 className="px-8 py-3 text-[14px] text-white rounded-sm my-2 bg-black ml-auto w-fit"
               >
                 Filter
               </button>
-            </div>
+            </DropdownMenuItem>
           </ScrollArea>
         </DropdownMenuContent>
       </DropdownMenu>

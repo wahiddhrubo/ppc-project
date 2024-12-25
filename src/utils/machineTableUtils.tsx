@@ -4,6 +4,7 @@ import {
   FilterConditionStringType,
   MachineTableAlignments,
 } from "../types/machines";
+// import { useSearchParams } from "react-router-dom";
 
 export const FilterConditionStrings: FilterConditionStringType[] = [
   "Is empty",

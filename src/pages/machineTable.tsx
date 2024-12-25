@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { MAINTANANCE_MACHINE_URL } from "../utils/urls";
-import { MaintanaceMachine } from "../types/machines";
+import { MachineTableAlignments, MaintanaceMachine } from "../types/machines";
 import {
   ColumnFiltersState,
   createColumnHelper,
@@ -32,9 +32,17 @@ import {
 import { ChevronDown } from "lucide-react";
 import { Button } from "../components/ui/button";
 import ClockLoader from "react-spinners/ClockLoader";
+import TableHeaderWithFilter from "../components/machineTable/header";
 
 export default function MachineTable() {
   const [loading, setLoading] = useState(false);
+  const [alignments, setAlignments] = useState<Array<MachineTableAlignments>>(
+    []
+  );
+  const [uniquesCategory, setUniquesCategory] = useState<string[]>([]);
+  const [uniquesType, setUniquesType] = useState<string[]>([]);
+  const [uniquesBrand, setUniquesBrand] = useState<string[]>([]);
+  const [uniquesSupplier, setUniquesSupplier] = useState<string[]>([]);
   const columnHelper = createColumnHelper<MaintanaceMachine>();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -49,7 +57,14 @@ export default function MachineTable() {
           <MdOutlineZoomOutMap />
         </span>
       ),
-      header: () => <span className="text-black font-semibold">Action</span>,
+      header: () => (
+        <TableHeaderWithFilter
+          dataType="string"
+          id="action"
+          setAllignment={setAlignments}
+          title="Actions"
+        />
+      ),
       id: "action",
       enableHiding: false,
       enableSorting: false,
@@ -59,21 +74,43 @@ export default function MachineTable() {
       enableHiding: true,
       enableSorting: true,
       header: () => (
-        <span className="text-black font-semibold">M/c Category</span>
+        <TableHeaderWithFilter
+          dataType="string"
+          id="category"
+          setAllignment={setAlignments}
+          title="M/c Category"
+          uniques={uniquesCategory}
+        />
       ),
+
       id: "category",
     }),
     columnHelper.accessor("type", {
       cell: (info) => info.getValue(),
       enableHiding: true,
       enableSorting: true,
-      header: () => <span className="text-black font-semibold">M/c type</span>,
+      header: () => (
+        <TableHeaderWithFilter
+          title="M/c Type"
+          dataType="string"
+          id="type"
+          setAllignment={setAlignments}
+          uniques={uniquesType}
+        />
+      ),
       id: "type",
     }),
     columnHelper.accessor("machine_id", {
       cell: (info) => info.getValue().replace(/^(\w)[a-zA-Z]*(-\d+)/, "$1$2"),
       id: "id",
-      header: () => <span className="text-black font-semibold">ID</span>,
+      header: () => (
+        <TableHeaderWithFilter
+          title="ID"
+          dataType="number"
+          id="id"
+          setAllignment={setAlignments}
+        />
+      ),
       enableHiding: false,
       enableSorting: false,
     }),
@@ -81,42 +118,86 @@ export default function MachineTable() {
       cell: (info) => info.getValue(),
       enableHiding: true,
       enableSorting: true,
-      header: () => <span className="text-black font-semibold">Brand</span>,
+      header: () => (
+        <TableHeaderWithFilter
+          title="Brand"
+          id="Brand"
+          dataType="string"
+          setAllignment={setAlignments}
+          uniques={uniquesBrand}
+        />
+      ),
       id: "brand",
     }),
     columnHelper.accessor("model_number", {
       cell: (info) => info.getValue(),
       enableHiding: true,
       enableSorting: true,
-      header: () => <span className="text-black font-semibold">Model</span>,
+      header: () => (
+        <TableHeaderWithFilter
+          title="Model"
+          id="model"
+          dataType="string"
+          setAllignment={setAlignments}
+        />
+      ),
       id: "model",
     }),
     columnHelper.accessor("serial_no", {
       cell: (info) => info.getValue().replace(/^[A-Z]+-/, ""),
       enableHiding: true,
       enableSorting: true,
-      header: () => <span className="text-black font-semibold">Serial</span>,
+      header: () => (
+        <TableHeaderWithFilter
+          title="Serial"
+          id="serial"
+          dataType="string"
+          setAllignment={setAlignments}
+        />
+      ),
       id: "serial",
     }),
     columnHelper.accessor("floor_no", {
       cell: (info) => info.getValue(),
       enableHiding: true,
       enableSorting: true,
-      header: () => <span className="text-black font-semibold">Floor</span>,
+      header: () => (
+        <TableHeaderWithFilter
+          title="Floor"
+          id="floor"
+          dataType="string"
+          setAllignment={setAlignments}
+        />
+      ),
       id: "floor",
     }),
     columnHelper.accessor("line_no", {
       cell: (info) => info.getValue(),
       enableHiding: true,
       enableSorting: true,
-      header: () => <span className="text-black font-semibold">Line</span>,
+      header: () => (
+        <TableHeaderWithFilter
+          title="Line"
+          id="line"
+          dataType="string"
+          setAllignment={setAlignments}
+        />
+      ),
       id: "line",
     }),
     columnHelper.accessor("supplier", {
       cell: (info) => info.getValue(),
       enableHiding: true,
       enableSorting: true,
-      header: () => <span className="text-black font-semibold">Supplier</span>,
+      header: () => (
+        <TableHeaderWithFilter
+          title="Supplier"
+          id="supplier"
+          dataType="string"
+          setAllignment={setAlignments}
+          uniques={uniquesSupplier}
+        />
+      ),
       id: "supplier",
     }),
     columnHelper.accessor("purchase_date", {
@@ -124,15 +205,28 @@ export default function MachineTable() {
       enableHiding: true,
       enableSorting: true,
       header: () => (
-        <span className="text-black font-semibold">Purchase Date</span>
+        <TableHeaderWithFilter
+          title="Purchase Date"
+          id="purchase Date"
+          dataType="number"
+          setAllignment={setAlignments}
+        />
       ),
+
       id: "purchase date",
     }),
     columnHelper.accessor("machine_id", {
       cell: (info) => info.getValue(),
       enableHiding: true,
       enableSorting: true,
-      header: () => <span className="text-black font-semibold">QR Code</span>,
+      header: () => (
+        <TableHeaderWithFilter
+          title="Qr Code"
+          id="Qr Code"
+          dataType="number"
+          setAllignment={setAlignments}
+        />
+      ),
       id: "qr code",
     }),
   ];
@@ -154,12 +248,33 @@ export default function MachineTable() {
       rowSelection,
     },
   });
+  const col_ids = table.getAllColumns().map((col) => col.id);
+  useEffect(() => {
+    if (col_ids) {
+      const newAlignments: MachineTableAlignments[] = col_ids.map((id) => ({
+        id,
+        alignment: "center",
+      }));
+
+      setAlignments(newAlignments);
+    }
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const { data: response } = await axios.get(MAINTANANCE_MACHINE_URL);
-        setMachines(response);
+        const { data: response }: { data: MaintanaceMachine[] } =
+          await axios.get(MAINTANANCE_MACHINE_URL);
+        const mcats = response.map((data) => data.category.toLowerCase());
+        const mbrands = response.map((data) => data.brand.toLowerCase());
+        const msuppliers = response.map((data) => data.supplier.toLowerCase());
+        const mtypes = response.map((data) => data.type.toLowerCase());
+        setUniquesBrand([...new Set(mbrands)]);
+        setUniquesCategory([...new Set(mcats)]);
+        setUniquesSupplier([...new Set(msuppliers)]);
+        setUniquesType([...new Set(mtypes)]);
+        setMachines([...new Set(response)]);
       } catch (error) {
         //   console.error(error.message);
       }
@@ -167,6 +282,7 @@ export default function MachineTable() {
     };
     fetchData();
   }, []);
+  console.log(alignments);
   return (
     <>
       {!loading ? (
@@ -205,7 +321,16 @@ export default function MachineTable() {
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id} className="px-3 py-2">
+                      <TableHead
+                        style={{
+                          textAlign:
+                            alignments.find(
+                              (alignment) => alignment.id === header.id
+                            )?.alignment || "left",
+                        }}
+                        key={header.id}
+                        className="px-3 py-2"
+                      >
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -221,7 +346,16 @@ export default function MachineTable() {
                 {table.getRowModel().rows.map((row) => (
                   <TableRow key={row.id} className="border-b">
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="px-3 py-2 ">
+                      <TableCell
+                        style={{
+                          textAlign:
+                            alignments.find(
+                              (alignment) => alignment.id === cell.id
+                            )?.alignment || "left",
+                        }}
+                        key={cell.id}
+                        className="px-3 py-2 "
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()

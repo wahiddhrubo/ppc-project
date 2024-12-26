@@ -69,7 +69,7 @@ export default function MachineTable() {
       enableSorting: true,
       header: () => (
         <TableHeaderWithFilter
-          dataType="string"
+          dataType="category"
           id="category"
           setAllignment={setAlignments}
           title="M/c Category"
@@ -86,7 +86,7 @@ export default function MachineTable() {
       header: () => (
         <TableHeaderWithFilter
           title="M/c Type"
-          dataType="string"
+          dataType="category"
           id="type"
           setAllignment={setAlignments}
           uniques={uniquesType}
@@ -116,7 +116,7 @@ export default function MachineTable() {
         <TableHeaderWithFilter
           title="Brand"
           id="Brand"
-          dataType="string"
+          dataType="category"
           setAllignment={setAlignments}
           uniques={uniquesBrand}
         />
@@ -145,7 +145,7 @@ export default function MachineTable() {
         <TableHeaderWithFilter
           title="Serial"
           id="serial"
-          dataType="string"
+          dataType="number"
           setAllignment={setAlignments}
         />
       ),
@@ -159,7 +159,7 @@ export default function MachineTable() {
         <TableHeaderWithFilter
           title="Floor"
           id="floor"
-          dataType="string"
+          dataType="number"
           setAllignment={setAlignments}
         />
       ),
@@ -173,7 +173,7 @@ export default function MachineTable() {
         <TableHeaderWithFilter
           title="Line"
           id="line"
-          dataType="string"
+          dataType="number"
           setAllignment={setAlignments}
         />
       ),
@@ -187,7 +187,7 @@ export default function MachineTable() {
         <TableHeaderWithFilter
           title="Supplier"
           id="supplier"
-          dataType="string"
+          dataType="category"
           setAllignment={setAlignments}
           uniques={uniquesSupplier}
         />
@@ -202,7 +202,7 @@ export default function MachineTable() {
         <TableHeaderWithFilter
           title="Purchase Date"
           id="purchase Date"
-          dataType="number"
+          dataType="date"
           setAllignment={setAlignments}
         />
       ),

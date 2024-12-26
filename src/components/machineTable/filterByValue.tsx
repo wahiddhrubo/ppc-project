@@ -1,9 +1,9 @@
-import { Minus, Plus } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { ScrollArea } from "../ui/scroll-area";
 import { Checkbox } from "../ui/checkbox";
 
 export default function FilterByValue({
+  dataType,
   searchedUniques,
   filterUniques,
   setFilterUniques,
@@ -13,23 +13,16 @@ export default function FilterByValue({
   setFilterUniques: Dispatch<SetStateAction<string[]>>;
   setFilterValue: Dispatch<SetStateAction<string>>;
   filterUniques: string[];
+  dataType: "number" | "string" | "date" | "category";
 }) {
-  const [showFilterValue, setShowFilterValue] = useState(false);
-
   return (
     <>
-      <div
-        onClick={() => setShowFilterValue((prev) => !prev)}
-        className="px-2 w-full items-center flex cursor-pointer justify-between font-semibold my-2  text-[14px]"
-      >
-        Filter by Value
-        {showFilterValue ? <Minus size={18} /> : <Plus size={18} />}
-      </div>
-      {showFilterValue && (
+      {dataType === "category" && (
         <div>
           <input
             onChange={(e) => setFilterValue(e.target.value)}
-            className="w-full border-2 text-sm border-black bg-transparent p-2 rounded-sm focus-within:outline-none"
+            className="w-full border-2 text-sm border-gray-400 mt-2 bg-transparent p-2 placeholder:text-gray-600 rounded-sm focus-within:outline-none"
+            placeholder="Seach Category"
           />
 
           {searchedUniques.length > 0 && (

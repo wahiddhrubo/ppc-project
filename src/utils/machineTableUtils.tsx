@@ -2,38 +2,29 @@ import { Dispatch, SetStateAction } from "react";
 import {
   FilterConditionNumberType,
   FilterConditionStringType,
+  FilterConditionTypeDate,
   MachineTableAlignments,
 } from "../types/machines";
 // import { useSearchParams } from "react-router-dom";
 
 export const FilterConditionStrings: FilterConditionStringType[] = [
-  "Is empty",
-  "Is not empty",
-  "Is equal to",
-  "Is not equal to",
+  "Exact Match",
+  "Contains",
+  "Not Contains",
+  "Starts With",
+  "Ends With",
 ];
 export const FilterConditionNumbers: FilterConditionNumberType[] = [
-  "Is empty",
-  "Is not empty",
-  "Is equal to",
-  "Is not equal to",
-  "Greater than",
-  "Greater than or equal to",
-  "Less than",
-  "Less than or equal to",
-  "Is between",
-  "Is not between",
-  "None",
+  "Exact Match",
+  "Greater Than",
+  "Less Than",
+  "Range",
 ];
 export const FilterValueNumbers: FilterConditionNumberType[] = [
-  "Is equal to",
-  "Is not equal to",
-  "Greater than",
-  "Greater than or equal to",
-  "Less than",
-  "Less than or equal to",
-  "Is between",
-  "Is not between",
+  "Exact Match",
+  "Greater Than",
+  "Less Than",
+  "Range",
 ];
 
 export const updateAlignment = (
@@ -49,3 +40,20 @@ export const updateAlignment = (
     )
   );
 };
+
+export const FilterConditionDates: FilterConditionTypeDate[] = [
+  "Exact Date",
+  "Date Range",
+  "Before",
+  "After",
+  "Yesterday",
+  "Past 7 Days",
+  "Last Month",
+  "Last Year",
+];
+
+export const FiltersConditionList = [
+  ...FilterConditionStrings,
+  ...FilterConditionNumbers,
+  ...FilterConditionDates,
+];

@@ -1,28 +1,35 @@
 export type FilterConditionStringType =
-  | "Is empty"
-  | "Is not empty"
-  | "Is equal to"
-  | "Is not equal to"
-  | "None";
+  | "Exact Match"
+  | "Contains"
+  | "Not Contains"
+  | "Starts With"
+  | "Ends With";
 
 export type FilterConditionNumberType =
-  | "Is empty"
-  | "Is not empty"
-  | "Is equal to"
-  | "Is not equal to"
-  | "Greater than"
-  | "Greater than or equal to"
-  | "Less than"
-  | "Less than or equal to"
-  | "Is between"
-  | "Is not between"
-  | "None";
+  | "Range"
+  | "Greater Than"
+  | "Less Than"
+  | "Exact Match";
+
+export type FilterConditionTypeDate =
+  | "Exact Date"
+  | "Date Range"
+  | "Before"
+  | "After"
+  | "Yesterday"
+  | "Past 7 Days"
+  | "Last Month"
+  | "Last Year";
 
 export type FilterCondition = {
   id: string;
-  condition: FilterConditionNumberType;
-  type: "string" | "number";
+  condition:
+    | FilterConditionNumberType
+    | FilterConditionStringType
+    | FilterConditionTypeDate;
+  type: "string" | "number" | "date";
   value: string;
+  value2: string;
 };
 export type MachineTableAlignments = {
   id: string;
@@ -46,8 +53,12 @@ export type MaintanaceMachine = {
 };
 
 export type FilterConditionType = {
-  condition: FilterConditionNumberType;
+  condition:
+    | FilterConditionNumberType
+    | FilterConditionStringType
+    | FilterConditionTypeDate;
   value: string;
+  value2: string;
 };
 
 export type MachineSearchFilters = {

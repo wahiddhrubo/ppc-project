@@ -29,7 +29,7 @@ export default function TableHeaderWithFilter({
   title: string;
   id: string;
   setAllignment: Dispatch<SetStateAction<MachineTableAlignments[]>>;
-  dataType: "string" | "number";
+  dataType: "string" | "number" | "date" | "category";
   uniques?: string[];
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -54,7 +54,6 @@ export default function TableHeaderWithFilter({
       atob(searchParams.get("filters") || "") || "[]"
     );
 
-    console.log(filters);
     const match = filters.find((filter) => filter.category == id);
     if (match) {
       const newFilter = filters.map((filter) =>
@@ -85,9 +84,11 @@ export default function TableHeaderWithFilter({
           conditions: filterConditions.map((f) => ({
             condition: f.condition,
             value: f.value,
+            value2: f.value2,
           })),
         },
       });
+
       searchParams.set("filters", btoa(JSON.stringify(filters)));
       setSearchParams(searchParams);
     }
@@ -100,7 +101,7 @@ export default function TableHeaderWithFilter({
           <FilterIcon className="cursor-pointer" size={16} />
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="bg-white z-100 text-lg w-56 border-2 p-5 rounded-sm border-black"
+          className="bg-white z-100 text-lg w-56 border-2 p-5 rounded-sm shadow-md"
           align="start"
         >
           <ScrollArea className="w-full  h-fit">
@@ -121,15 +122,18 @@ export default function TableHeaderWithFilter({
                 ))}
               </SelectContent>
             </Select>
-            <FilterByCondition
-              dataType={dataType}
-              filterConditions={filterConditions}
-              filterOperator={filterOperator}
-              setFilterConditions={setFilterConditions}
-              setFilterOperator={setFilterOperator}
-            />
+            {dataType !== "category" && (
+              <FilterByCondition
+                dataType={dataType}
+                filterConditions={filterConditions}
+                filterOperator={filterOperator}
+                setFilterConditions={setFilterConditions}
+                setFilterOperator={setFilterOperator}
+              />
+            )}
 
             <FilterByValue
+              dataType={dataType}
               filterUniques={filterUniques}
               searchedUniques={searchedUniques}
               setFilterUniques={setFilterUniques}
